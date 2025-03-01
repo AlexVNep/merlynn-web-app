@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-// import Logout from "../ui/Logout";
 import { useSession } from "next-auth/react";
+import Logout from "./LogoutButton";
 
 export default function Navbar() {
   const { data: session, status } = useSession();
@@ -15,7 +15,7 @@ export default function Navbar() {
 
         <div className="flex items-center gap-x-5">
           {status === "loading" ? (
-            <p>Loading...</p> // Show a loading state while session loads
+            <p>Loading...</p>
           ) : session ? (
             <>
               <Link href="/dashboard">Dashboard</Link>
@@ -35,7 +35,7 @@ export default function Navbar() {
               <div className="flex items-center gap-x-2 text-sm">
                 {session?.user?.email}
               </div>
-              {/* <Logout /> */}
+              <Logout />
             </>
           )}
         </div>
