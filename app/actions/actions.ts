@@ -73,3 +73,42 @@ export async function loginWithCreds(formData: FormData) {
     return { error: "Something went wrong. Please try again later." };
   }
 }
+
+export async function endpointSubmit(formData: FormData) {
+  const endpointSchema = z.object({
+    url: z.string().trim(),
+    key: z.string().trim(),
+  });
+
+  const validatedFields = endpointSchema.safeParse({
+    url: formData.get("url"),
+    key: formData.get("key"),
+  });
+
+  if (!validatedFields.success) {
+    console.error(
+      "Validation errors:",
+      validatedFields.error.flatten().fieldErrors
+    );
+    return { error: "Not validated" };
+  }
+
+  const { url, key } = validatedFields.data;
+
+  console.log(url, key);
+
+  try {
+    const data = await fetch(`${url}`, {
+      headers: {
+        Authorization: `ApiKey ${key}`,
+        "Content-Type": "application/vnd.api+json",
+      },
+      method: "GET",
+    });
+    const result = await data.json();
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+}
