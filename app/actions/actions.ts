@@ -5,6 +5,7 @@ import User from "../models/Users";
 import bcrypt from "bcryptjs";
 import connect from "../utils/db";
 import { signIn } from "@/auth";
+import { EndpointState } from "../utils/definitions";
 
 type RegisterResponse = { success: true } | { error: string };
 
@@ -74,7 +75,10 @@ export async function loginWithCreds(formData: FormData) {
   }
 }
 
-export async function endpointSubmit(formData: FormData) {
+export async function endpointSubmit(
+  state: EndpointState | null | undefined,
+  formData: FormData
+): Promise<EndpointState | undefined> {
   const endpointSchema = z.object({
     url: z.string().trim(),
     key: z.string().trim(),
@@ -105,10 +109,29 @@ export async function endpointSubmit(formData: FormData) {
       },
       method: "GET",
     });
+
+    if (!data.ok) {
+      return { error: `Request failed with status: ${data.status}` };
+    }
+
     const result = await data.json();
     console.log(result);
-    return result;
+    return {
+      ...state,
+      data: result,
+      message: "Good request",
+    };
   } catch (error) {
-    console.log(error);
+    console.error("Fetch error:", error);
+
+    // Ensure `error` is converted to a string
+    let errorMessage = "Request failed";
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    } else if (typeof error === "string") {
+      errorMessage = error;
+    }
+
+    return { error: errorMessage };
   }
 }
