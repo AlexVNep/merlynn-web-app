@@ -1,12 +1,22 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { endpointSubmit } from "../actions/actions";
 import SubmitButton from "../components/SubmitButton";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 export default function ApiForm() {
   const [state, formAction] = useActionState(endpointSubmit, null);
+  const router = useRouter();
 
   console.log(state);
+
+  useEffect(() => {
+    if (state?.data) {
+      router.push(
+        `/dynamic-form?data=${encodeURIComponent(JSON.stringify(state.data))}`
+      );
+    }
+  }, [state, router]);
 
   return (
     <div className="">
@@ -42,7 +52,6 @@ export default function ApiForm() {
           <SubmitButton />
         </div>
       </form>
-      {/* Make form component <DynamicForm data={questions}/> */}
     </div>
   );
 }
