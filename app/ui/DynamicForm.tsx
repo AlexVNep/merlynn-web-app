@@ -29,17 +29,17 @@ export default function DynamicFormComponent({
   };
 
   return (
-    <div className="w-[400px] mt-10 ">
+    <div className="w-full flex flex-col border-t pt-5 mt-15 justify-center">
       <div>
-        <h2 className="text-2xl w-full text-center font-bold mb-6">
-          Model: {state.data.name}
+        <h2 className="text-3xl w-full text-center font-bold mb-6">
+          {state.data.name}
         </h2>
       </div>
       <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4 p-4">
         {/* Dynamic Attributes */}
         {attributes.map((attr: Attribute, index: number) => (
           <div key={index}>
-            <label className="block text-sm font-medium text-gray-200">
+            <label className="block text-sm font-medium text-white">
               {attr.question}
             </label>
             {attr.domain.type === "text" ? (

@@ -120,6 +120,8 @@ export async function endpointSubmit(
       ...state,
       data: result,
       message: "Good request",
+      url: url,
+      key: key,
     };
   } catch (error) {
     console.error("Fetch error:", error);

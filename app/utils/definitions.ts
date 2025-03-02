@@ -55,4 +55,6 @@ export interface EndpointState {
   error?: string;
   data?: ApiResponse;
   message?: string;
+  url?: string;
+  key?: string;
 }
