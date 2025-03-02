@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import Logout from "./LogoutButton";
 
 export default function Navbar() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   return (
     <nav className="border-b bg-background w-full flex items-center">
       <div className="flex w-full items-center justify-between my-4">
@@ -14,9 +14,7 @@ export default function Navbar() {
         </Link>
 
         <div className="flex items-center gap-x-5">
-          {status === "loading" ? (
-            <p>Loading...</p>
-          ) : session ? (
+          {session ? (
             <>
               <Link href="/dashboard">Dashboard</Link>
             </>
