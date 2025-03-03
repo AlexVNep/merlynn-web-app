@@ -74,6 +74,5 @@ export interface ApiResultResponse {
   modelInputs: [];
   userInputs: [];
   confidence: number;
-  decision: string; // added decision property
-  // other properties
+  decision: string;
 }
