@@ -1,17 +1,22 @@
 "use client";
 
-import { endpointSubmit } from "../actions/actions";
+import { useRouter } from "next/navigation";
 import SubmitButton from "../components/SubmitButton";
-import { useActionState } from "react";
-import DynamicForm from "./DynamicForm";
-export default function ApiForm() {
-  const [state, formAction] = useActionState(endpointSubmit, null);
+import { useState } from "react";
 
-  console.log(state);
+export default function ApiForm() {
+  const router = useRouter();
+  const [formState, setFormState] = useState({ url: "", key: "" });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const searchParams = new URLSearchParams(formState).toString();
+    router.push(`/submit?${searchParams}`);
+  };
 
   return (
     <div className="">
-      <form action={formAction} className="w-full flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-200">
             API URL
@@ -22,6 +27,10 @@ export default function ApiForm() {
             id="url"
             name="url"
             className="mt-1 w-full px-4 p-2  h-10 rounded-md border border-gray-200 bg-white text-sm text-gray-700"
+            value={formState.url}
+            onChange={(e) =>
+              setFormState({ ...formState, url: e.target.value })
+            }
           />
         </div>
         <div>
@@ -34,16 +43,16 @@ export default function ApiForm() {
             name="key"
             id="key"
             className="mt-1 w-full px-4 p-2  h-10 rounded-md border border-gray-200 bg-white text-sm text-gray-700"
+            value={formState.key}
+            onChange={(e) =>
+              setFormState({ ...formState, key: e.target.value })
+            }
           />
         </div>
-        {state?.error && !state.message && (
-          <p className="text-red-500">{state.error}</p>
-        )}
         <div className="mt-4">
           <SubmitButton />
         </div>
       </form>
-      {state && <DynamicForm state={state} />}
     </div>
   );
 }
