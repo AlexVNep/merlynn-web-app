@@ -1,8 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import SubmitButton from "../components/SubmitButton";
+// import SubmitButton from "../components/SubmitButton";
 import { useCallback, useState } from "react";
+import Button from "../components/Button";
 
 export default function ApiForm() {
   const router = useRouter();
@@ -59,7 +60,7 @@ export default function ApiForm() {
           />
         </div>
         <div className="mt-4">
-          <SubmitButton />
+          <Button title={"Submit"} />
         </div>
       </form>
     </div>

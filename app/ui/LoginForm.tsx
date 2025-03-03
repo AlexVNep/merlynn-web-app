@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import AuthButton from "../components/AuthButton";
+
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { loginWithCreds } from "../actions/actions";
 import { useSession } from "next-auth/react";
+import Button from "../components/Button";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -59,7 +60,7 @@ export default function LoginForm() {
         </div>
         {error && <p className="text-red-500">{error}</p>}
         <div className="mt-4">
-          <AuthButton />
+          <Button title={"Sign-In"} />
         </div>
         <div className="text-center">
           Don&apos;t have an account?

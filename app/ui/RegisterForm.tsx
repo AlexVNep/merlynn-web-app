@@ -1,10 +1,9 @@
 "use client";
 
-import RegisterButton from "../components/RegisterButton";
-
 import { useRouter } from "next/navigation";
 import { registerWithCreds } from "../actions/actions";
 import { useState } from "react";
+import Button from "../components/Button";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -48,7 +47,7 @@ export default function RegisterForm() {
         </div>
         {error && <p className="text-red-500">{error}</p>}
         <div className="mt-4">
-          <RegisterButton />
+          <Button title={"Register"} />
         </div>
       </form>
     </div>
