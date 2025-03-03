@@ -58,3 +58,13 @@ export interface EndpointState {
   url?: string;
   key?: string;
 }
+
+export interface DecisionData {
+  id: string;
+  modelInput: {
+    [key: string]: number | string;
+  };
+  userInput: (number | string)[];
+  decision: string;
+  confidence: number;
+}
