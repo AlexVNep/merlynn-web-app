@@ -51,14 +51,6 @@ export interface ApiResponse {
   metadata: Metadata;
 }
 
-export interface EndpointState {
-  error?: string;
-  data?: ApiResponse;
-  message?: string;
-  url?: string;
-  key?: string;
-}
-
 export interface DecisionData {
   id: string;
   modelInput: {
@@ -67,4 +59,12 @@ export interface DecisionData {
   userInput: (number | string)[];
   decision: string;
   confidence: number;
+}
+
+export interface EndpointState {
+  error?: string;
+  data?: ApiResponse;
+  message?: string;
+  url?: string;
+  key?: string;
 }
