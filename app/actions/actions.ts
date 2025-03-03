@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 import connect from "../utils/db";
 import { signIn } from "@/auth";
 import { EndpointState } from "../utils/definitions";
+import Decision from "../models/Decisions";
 
 type RegisterResponse = { success: true } | { error: string };
 
@@ -135,5 +136,89 @@ export async function endpointSubmit(
     }
 
     return { error: errorMessage };
+  }
+}
+
+export async function formSubmit(
+  state: EndpointState,
+  formData: FormData,
+  url: string,
+  apiKey: string
+): Promise<EndpointState | undefined> {
+  interface InputData {
+    [key: string]: number | string | undefined;
+  }
+
+  await connect();
+  try {
+    if (!state?.data?.metadata?.attributes) {
+      console.error("Invalid state data: Missing metadata attributes.");
+      return;
+    }
+
+    const input: InputData = {};
+
+    state.data.metadata.attributes.forEach((attr, index) => {
+      const inputVarKey = `INPUTVAR${index + 1}`;
+      const value = formData.get(attr.question);
+
+      if (value !== null && !(value instanceof File)) {
+        input[inputVarKey] =
+          attr.domain.type === "number" ? Number(value) : value;
+      }
+    });
+
+    const requestBody = { input };
+
+    console.log("Formatted Request Body:", requestBody);
+
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `ApiKey ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(requestBody),
+    });
+
+    const data = await res.json();
+    console.log(data);
+
+    if (data.errors) {
+      console.log("API Error:", data.errors);
+    } else {
+      await createDecision({
+        id: data.id,
+        modelInput: data.modelInput,
+        userInput: data.userInput,
+        decision: data.decision,
+        confidence: data.confidence,
+      });
+      console.log("Decision saved successfully.");
+    }
+
+    return {
+      ...state,
+      data: data,
+      message: "Good request",
+    };
+  } catch (error) {
+    console.error("Network or API error:", error);
+  }
+}
+
+export async function createDecision(data: {
+  id: string;
+  modelInput: Record<string, number | string>;
+  userInput: (number | string)[];
+  decision: string;
+  confidence: number;
+}) {
+  try {
+    const newDecision = new Decision(data);
+    await newDecision.save();
+    console.log("Decision saved successfully:", newDecision);
+  } catch (error) {
+    console.error("Error saving decision:", error);
   }
 }
