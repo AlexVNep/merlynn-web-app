@@ -41,8 +41,10 @@ function SessionWrapper({ children }: { children: React.ReactNode }) {
     // If session is loading, no action should be taken
     if (status === "loading") return;
 
+    const publicPages = ["/login", "/register"];
+
     // If no session exists and we're not on the login page, redirect to login
-    if (!session && pathname !== "/login") {
+    if (!session && !publicPages.includes(pathname)) {
       router.push("/login");
     }
   }, [session, status, pathname, router]);
