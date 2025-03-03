@@ -2,17 +2,26 @@
 
 import { useRouter } from "next/navigation";
 import SubmitButton from "../components/SubmitButton";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 export default function ApiForm() {
   const router = useRouter();
   const [formState, setFormState] = useState({ url: "", key: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const searchParams = new URLSearchParams(formState).toString();
-    router.push(`/submit?${searchParams}`);
-  };
+  const handleSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+
+      const { url } = formState;
+      const searchParams = new URLSearchParams(formState).toString();
+
+      // Determine the correct route
+      const route = url.endsWith("/results") ? "/results" : "/submit";
+
+      router.push(`${route}?${searchParams}`);
+    },
+    [formState, router]
+  );
 
   return (
     <div className="">

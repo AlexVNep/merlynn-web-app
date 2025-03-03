@@ -5,7 +5,7 @@ import User from "../models/Users";
 import bcrypt from "bcryptjs";
 import connect from "../utils/db";
 import { signIn } from "@/auth";
-import { EndpointState } from "../utils/definitions";
+import { ApiResultResponse, EndpointState } from "../utils/definitions";
 import Decision from "../models/Decisions";
 
 type RegisterResponse = { success: true } | { error: string };
@@ -220,5 +220,32 @@ export async function createDecision(data: {
     console.log("Decision saved successfully:", newDecision);
   } catch (error) {
     console.error("Error saving decision:", error);
+  }
+}
+export async function endpointResult(
+  url: string,
+  apiKey: string
+): Promise<ApiResultResponse[] | undefined> {
+  try {
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `ApiKey ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      method: "GET",
+    });
+
+    if (!res.ok) {
+      console.error(`Error: ${res.status} - ${res.statusText}`);
+      return undefined;
+    }
+
+    const data = await res.json();
+    console.log("Fetched data:", data);
+
+    return data.results; // Ensure we return the results array
+  } catch (error) {
+    console.error("Network or API error:", error);
+    return undefined;
   }
 }

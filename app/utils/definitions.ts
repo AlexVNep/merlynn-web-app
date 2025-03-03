@@ -68,3 +68,12 @@ export interface EndpointState {
   url?: string;
   key?: string;
 }
+
+export interface ApiResultResponse {
+  id: string;
+  modelInputs: [];
+  userInputs: [];
+  confidence: number;
+  decision: string; // added decision property
+  // other properties
+}
