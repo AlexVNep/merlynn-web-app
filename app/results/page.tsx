@@ -4,7 +4,6 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { ApiResultResponse } from "../utils/definitions";
-
 import { endpointResult } from "../actions/actions";
 import ResultCard from "../ui/ResultCard";
 
@@ -21,7 +20,9 @@ export default function ResultPage() {
         try {
           const response = await endpointResult(url, key);
           console.log("Response from endpointResult:", response);
+
           setState(response || []); // Ensure we always set an array
+          localStorage.setItem("resultsData", JSON.stringify(response || [])); // Store in localStorage
         } catch (error) {
           console.log(error);
         }
