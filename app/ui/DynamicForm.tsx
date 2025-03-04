@@ -17,6 +17,7 @@ export default function DynamicFormComponent({
 }) {
   const [decision, setDecision] = useState<DecisionData | null>(null);
   const [showForm, setShowForm] = useState(true);
+  console.log(state);
 
   if (
     !state ||

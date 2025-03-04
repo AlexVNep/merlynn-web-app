@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-// import SubmitButton from "../components/SubmitButton";
 import { useCallback, useState } from "react";
 import Button from "../components/Button";
 
@@ -16,7 +15,6 @@ export default function ApiForm() {
       const { url } = formState;
       const searchParams = new URLSearchParams(formState).toString();
 
-      // Determine the correct route
       const route = url.endsWith("/results") ? "/results" : "/submit";
 
       router.push(`${route}?${searchParams}`);
