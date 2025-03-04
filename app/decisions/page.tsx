@@ -16,9 +16,16 @@ export default function DecisionsPage() {
       ) : (
         <div className="w-full flex mt-5 justify-center">
           <section className="flex flex-col w-[400px]">
-            <h2 className="text-3xl w-full text-center font-bold mb-6">
+            <h1 className="text-3xl w-full text-center font-bold mb-6">
               Results Generator
-            </h2>
+            </h1>
+            <p>
+              Input the relevant API endpoint and API key into the form below.
+              This endpoint must include &quot;results&quot; at the end.
+              <br />
+              This endpoint will perform a GET request and retrieve data for the
+              specified model to produce a list of results.
+            </p>
             <ApiForm />
           </section>
         </div>
