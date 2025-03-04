@@ -57,6 +57,19 @@ export default function DashboardPage() {
                     proceed.
                   </li>
                 </ul>
+                <p className="text-lg font-medium mb-2 mt-4">
+                  If the ID field is filled in:
+                </p>
+                <ul className="list-disc pl-5 text-gray-600">
+                  <li>
+                    The request will navigate you directly to the page holding
+                    the specific result you are searching for.
+                  </li>
+                  <li>
+                    The result page will display detailed information related to
+                    the provided ID.
+                  </li>
+                </ul>
                 <p className="text-lg font-medium mb-2 mt-4">Example:</p>
                 <ul className="list-disc pl-5 text-gray-600">
                   <li>
@@ -66,6 +79,10 @@ export default function DashboardPage() {
                   <li>
                     For a results endpoint like <code>/model/results</code>, you
                     will be shown a list of available results.
+                  </li>
+                  <li>
+                    If an ID is provided (e.g., <code>/model/results/123</code>
+                    ), you will be taken directly to the specific result page.
                   </li>
                 </ul>
               </div>

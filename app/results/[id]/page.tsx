@@ -50,7 +50,7 @@ export default function ResultDetail({
           onClick={() => router.back()}
           className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg"
         >
-          Back to Results
+          Back
         </button>
       </section>
     </div>
