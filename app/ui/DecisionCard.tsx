@@ -1,6 +1,18 @@
 import { DecisionData } from "../utils/definitions";
 
-export default function DecisionCard({ decision }: { decision: DecisionData }) {
+export default function DecisionCard({
+  decision,
+}: {
+  decision: DecisionData | null;
+}) {
+  if (!decision) {
+    return (
+      <div className="w-full max-w-lg mx-auto bg-gray-800 text-white p-6 rounded-lg shadow-lg border border-gray-700">
+        <p className="text-center text-gray-400">No decision available.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full max-w-lg mx-auto bg-gray-800 text-white p-6 rounded-lg shadow-lg border border-gray-700">
       <h2 className="text-2xl font-bold text-center mb-4">Model Decision</h2>
@@ -14,7 +26,9 @@ export default function DecisionCard({ decision }: { decision: DecisionData }) {
         </p>
         <p className="text-lg">
           <span className="font-semibold">Confidence:</span>{" "}
-          {decision.confidence.toFixed(2)}
+          {decision.confidence !== undefined && decision.confidence !== null
+            ? decision.confidence.toFixed(2)
+            : "N/A"}
         </p>
       </div>
 
@@ -23,11 +37,17 @@ export default function DecisionCard({ decision }: { decision: DecisionData }) {
           Model Input
         </h3>
         <ul className="list-disc list-inside mt-2 space-y-1">
-          {Object.entries(decision.modelInput).map(([key, value]) => (
-            <li key={key} className="text-sm">
-              <span className="font-medium text-gray-300">{key}:</span> {value}
-            </li>
-          ))}
+          {decision.modelInput &&
+          Object.entries(decision.modelInput).length > 0 ? (
+            Object.entries(decision.modelInput).map(([key, value]) => (
+              <li key={key} className="text-sm">
+                <span className="font-medium text-gray-300">{key}:</span>{" "}
+                {value}
+              </li>
+            ))
+          ) : (
+            <p className="text-sm text-gray-400">No model input available.</p>
+          )}
         </ul>
       </div>
 
@@ -36,11 +56,17 @@ export default function DecisionCard({ decision }: { decision: DecisionData }) {
           User Input
         </h3>
         <ul className="list-disc list-inside mt-2 space-y-1">
-          {Object.entries(decision.userInput).map((input, index) => (
-            <li key={index} className="text-sm">
-              {input}
-            </li>
-          ))}
+          {decision.userInput &&
+          Object.entries(decision.userInput).length > 0 ? (
+            Object.entries(decision.userInput).map(([key, value]) => (
+              <li key={key} className="text-sm">
+                <span className="font-medium text-gray-300">{key}:</span>{" "}
+                {value}
+              </li>
+            ))
+          ) : (
+            <p className="text-sm text-gray-400">No user input available.</p>
+          )}
         </ul>
       </div>
     </div>

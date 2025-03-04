@@ -17,8 +17,9 @@ export default function DynamicFormComponent({
 }) {
   const [decision, setDecision] = useState<DecisionData | null>(null);
   const [showForm, setShowForm] = useState(true);
-  console.log(state);
+  const [error, setError] = useState<string | null>(null);
 
+  console.log(state);
   if (
     !state ||
     !state.data ||
@@ -32,11 +33,54 @@ export default function DynamicFormComponent({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+
+    const formData = new FormData(e.target as HTMLFormElement);
+    const gender = formData.get("Gender?");
+    const pregnant = formData.get("Pregnant?");
+    const drinksToday = Number(
+      formData.get("Number of drinks consumed today?")
+    );
+    const drinksPerDay = Number(
+      formData.get("Number of drinks consumed per day?")
+    );
+
+    // Apply exclusion rule: If Gender is Male, Pregnant? must be "NA"
+    if (gender === "Male" && pregnant !== "NA") {
+      setError(
+        "Exclusion rule triggered: If Gender is Male, Pregnancy must be NA."
+      );
+      return;
+    }
+
+    // Apply exclusion rule: If Gender is NOT Male, Pregnant? cannot be NA
+    if (gender !== "Male" && pregnant === "NA") {
+      setError(
+        "Exclusion rule triggered: If Gender is not Male, Pregnancy cannot be NA."
+      );
+      return;
+    }
+
+    // Apply exclusion rule: If Pregnant? is NOT NA, Gender cannot be Male
+    if (pregnant !== "NA" && gender === "Male") {
+      setError(
+        "Exclusion rule triggered: If Pregnant is not NA, Gender cannot be Male."
+      );
+      return;
+    }
+
+    // Apply the exclusion rule: Number of drinks consumed today must be <= Number of drinks consumed per day
+    if (drinksPerDay > drinksToday) {
+      setError(
+        "Exclusion rule triggered: Number of drinks consumed today must be less than or equal to the Number of drinks consumed per day."
+      );
+      return;
+    }
 
     if (state) {
       const response = await formSubmit(
         state,
-        new FormData(e.target as HTMLFormElement),
+        formData,
         state.url || "",
         state.key || ""
       );
@@ -89,6 +133,8 @@ export default function DynamicFormComponent({
             </div>
           ))}
 
+          {error && <p className="text-red-500">{error}</p>}
+
           <button
             type="submit"
             className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
@@ -103,6 +149,7 @@ export default function DynamicFormComponent({
             onClick={() => {
               setShowForm(true);
               setDecision(null);
+              setError(null);
             }}
             className="mt-4 bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700"
           >
