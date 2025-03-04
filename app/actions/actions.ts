@@ -76,10 +76,7 @@ export async function loginWithCreds(formData: FormData) {
   }
 }
 
-export async function endpointSubmit(
-  state: EndpointState | null | undefined,
-  formData: FormData
-): Promise<EndpointState | undefined> {
+export async function endpointGET(formData: FormData) {
   const endpointSchema = z.object({
     url: z.string().trim(),
     key: z.string().trim(),
@@ -118,24 +115,16 @@ export async function endpointSubmit(
     const result = await data.json();
     console.log(result);
     return {
-      ...state,
       data: result,
       message: "Good request",
       url: url,
       key: key,
     };
   } catch (error) {
-    console.error("Fetch error:", error);
-
-    // Ensure `error` is converted to a string
-    let errorMessage = "Request failed";
-    if (error instanceof Error) {
-      errorMessage = error.message;
-    } else if (typeof error === "string") {
-      errorMessage = error;
-    }
-
-    return { error: errorMessage };
+    return {
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred",
+    };
   }
 }
 

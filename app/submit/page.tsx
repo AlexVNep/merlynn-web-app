@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { endpointSubmit } from "../actions/actions";
+import { endpointGET } from "../actions/actions";
 import DynamicForm from "../ui/DynamicForm";
 import { EndpointState } from "../utils/definitions";
 
@@ -21,12 +21,7 @@ export default function SubmitPage() {
           formData.append("url", url);
           formData.append("key", key);
 
-          const initialState: EndpointState = {
-            error: undefined,
-            message: undefined,
-          };
-
-          const response = await endpointSubmit(initialState, formData);
+          const response = await endpointGET(formData);
           setState(response);
         } catch (error) {
           if (error instanceof Error) {
