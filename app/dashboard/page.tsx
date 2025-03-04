@@ -17,7 +17,7 @@ export default function DashboardPage() {
         <div className="w-full flex mt-5 justify-center">
           <section className="flex flex-col w-[400px]">
             <h1 className="text-3xl w-full text-center font-bold mb-6">
-              Form Generator
+              API Endpoint and APIkey Input Form
             </h1>
             <p>
               Input the relevant API endpoint and API key into the form below.

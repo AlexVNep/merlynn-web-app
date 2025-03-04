@@ -17,7 +17,6 @@ export default function Navbar() {
           {session ? (
             <>
               <Link href="/dashboard">Dashboard</Link>
-              <Link href="/decisions">Decisions</Link>
             </>
           ) : null}
         </div>
