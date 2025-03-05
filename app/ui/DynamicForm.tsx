@@ -5,6 +5,7 @@ import {
   Attribute,
   DecisionData,
   EndpointState,
+  ExclusionCondition,
   Value,
 } from "../utils/definitions";
 import { formSubmit } from "../actions/actions";
@@ -19,62 +20,94 @@ export default function DynamicFormComponent({
   const [showForm, setShowForm] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  console.log(state);
   if (
     !state ||
     !state.data ||
-    !("metadata" in state.data) ||
+    !state.data.metadata ||
     !state.data.metadata.attributes
   ) {
     return <p className="text-red-500">Invalid API response</p>;
   }
 
-  const { attributes } = state.data.metadata;
+  const { attributes, exclusions } = state.data.metadata;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
     const formData = new FormData(e.target as HTMLFormElement);
-    const gender = formData.get("Gender?");
-    const pregnant = formData.get("Pregnant?");
-    const drinksToday =
-      Number(formData.get("Number of drinks consumed today?")) || 0;
-    const drinksPerDay =
-      Number(formData.get("Number of drink consumed per day?")) || 0;
+    const inputValues: Record<string, string | number | null> = {};
+    attributes.forEach((attr) => {
+      const value = formData.get(attr.question);
+      inputValues[attr.question] = typeof value === "string" ? value : null;
+    });
 
-    setError(null);
+    // Apply exclusion rules dynamically
+    for (const rule of exclusions) {
+      const failingConditions: string[] = [];
 
-    // Apply exclusion rule: If Gender is Male, Pregnant? must be "NA"
-    if (gender === "Male" && pregnant !== "NA") {
-      setError(
-        "Exclusion rule triggered: If Gender is Male, Pregnancy must be NA."
-      );
-      return;
-    }
+      if (rule.type === "ValueEx") {
+        const antecedentMet =
+          Array.isArray(rule.antecedent) &&
+          rule.antecedent.every((cond: ExclusionCondition) => {
+            return evalCondition(inputValues, cond);
+          });
 
-    // Apply exclusion rule: If Gender is NOT Male, Pregnant? cannot be NA
-    if (gender !== "Male" && pregnant === "NA") {
-      setError(
-        "Exclusion rule triggered: If Gender is not Male, Pregnancy cannot be NA."
-      );
-      return;
-    }
+        const consequentMet =
+          Array.isArray(rule.consequent) &&
+          rule.consequent.every((cond: ExclusionCondition) => {
+            return evalCondition(inputValues, cond);
+          });
 
-    // Apply exclusion rule: If Pregnant? is NOT NA, Gender cannot be Male
-    if (pregnant !== "NA" && gender === "Male") {
-      setError(
-        "Exclusion rule triggered: If Pregnant is not NA, Gender cannot be Male."
-      );
-      return;
-    }
+        if (antecedentMet && !consequentMet) {
+          // Find which consequent conditions failed
+          if (Array.isArray(rule.consequent)) {
+            rule.consequent.forEach((cond: ExclusionCondition) => {
+              if (!evalCondition(inputValues, cond)) {
+                const attr =
+                  typeof cond.index === "number"
+                    ? attributes[cond.index]
+                    : undefined;
+                failingConditions.push(
+                  `${attr?.question} should be ${cond.threshold}`
+                );
+              }
+            });
+          }
 
-    // Apply the exclusion rule: Number of drinks consumed today must be <= Number of drinks consumed per day
-    if (drinksPerDay < drinksToday) {
-      setError(
-        "Exclusion rule triggered: Number of drinks consumed today must be less than or equal to the Number of drinks consumed per day."
-      );
-      return;
+          setError(
+            `Exclusion rule triggered: Invalid input combination. \n Issues: ${failingConditions.join(
+              ", "
+            )}`
+          );
+          return;
+        }
+      } else if (rule.type === "RelationshipEx") {
+        if (rule.relation && !evalCondition(inputValues, rule.relation)) {
+          if (
+            typeof rule.relation.index === "number" &&
+            typeof rule.relation.threshold === "number"
+          ) {
+            const attrA = attributes[rule.relation.index]; // Left-side attribute
+            const attrB = attributes[rule.relation.threshold]; // Right-side attribute
+
+            if (attrA && attrB) {
+              failingConditions.push(
+                `${attrA.question} must be ${
+                  rule.relation.type === "LTEQ" ? "≤" : ">"
+                } ${attrB.question}`
+              );
+            }
+          }
+
+          setError(
+            `Exclusion rule triggered: Relationship constraint violated. \n Issues: ${failingConditions.join(
+              ", "
+            )}`
+          );
+          return;
+        }
+      }
     }
 
     if (state) {
@@ -89,18 +122,47 @@ export default function DynamicFormComponent({
         setDecision(response.data as unknown as DecisionData);
         setShowForm(false);
       }
-      console.log(response);
+    }
+  };
+
+  const evalCondition = (
+    inputs: Record<string, string | number | null>,
+    condition: ExclusionCondition
+  ) => {
+    const { index, threshold, type } = condition;
+
+    if (type === "LTEQ" || type === "GTEQ") {
+      // RelationshipEx case: threshold refers to another attribute
+      if (typeof index === "number" && typeof threshold === "number") {
+        const attrA = attributes[index]; // Left-side attribute
+        const attrB = attributes[threshold]; // Right-side attribute
+
+        if (!attrA || !attrB) return false;
+
+        const valueA = Number(inputs[attrA.question]);
+        const valueB = Number(inputs[attrB.question]);
+
+        if (isNaN(valueA) || isNaN(valueB)) return false;
+
+        return type === "LTEQ" ? valueA <= valueB : valueA > valueB;
+      }
+    } else {
+      // Standard ValueEx cases
+      const attr = typeof index === "number" ? attributes[index] : undefined;
+      if (!attr) return false;
+
+      const value = inputs[attr.question];
+      if (type === "EQ") return value === threshold;
+      if (type === "NEQ") return value !== threshold;
+      return false;
     }
   };
 
   return (
     <div className="w-full flex flex-col border-t pt-5 mt-5 justify-center">
-      <div>
-        <h2 className="text-2xl w-full text-center font-bold mb-6">
-          {state.data.name}
-        </h2>
-      </div>
-
+      <h2 className="text-2xl w-full text-center font-bold mb-6">
+        {state.data.name}
+      </h2>
       {showForm ? (
         <form
           onSubmit={handleSubmit}
@@ -133,9 +195,7 @@ export default function DynamicFormComponent({
               ) : null}
             </div>
           ))}
-
-          {error && <p className="text-red-500">{error}</p>}
-
+          {error && <p className="text-red-500 whitespace-pre-line">{error}</p>}
           <button
             type="submit"
             className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"

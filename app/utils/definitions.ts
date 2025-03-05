@@ -26,7 +26,7 @@ export interface Attribute {
 export interface ExclusionCondition {
   index?: number;
   threshold: string | number;
-  type: "EQ" | "NEQ" | "LTEQ";
+  type: "EQ" | "NEQ" | "LTEQ" | "GTEQ";
 }
 
 export interface Exclusion {
