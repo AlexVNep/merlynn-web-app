@@ -38,12 +38,12 @@ export default function DynamicFormComponent({
     const formData = new FormData(e.target as HTMLFormElement);
     const gender = formData.get("Gender?");
     const pregnant = formData.get("Pregnant?");
-    const drinksToday = Number(
-      formData.get("Number of drinks consumed today?")
-    );
-    const drinksPerDay = Number(
-      formData.get("Number of drinks consumed per day?")
-    );
+    const drinksToday =
+      Number(formData.get("Number of drinks consumed today?")) || 0;
+    const drinksPerDay =
+      Number(formData.get("Number of drinks consumed per day?")) || 0;
+
+    setError(null);
 
     // Apply exclusion rule: If Gender is Male, Pregnant? must be "NA"
     if (gender === "Male" && pregnant !== "NA") {
@@ -70,7 +70,7 @@ export default function DynamicFormComponent({
     }
 
     // Apply the exclusion rule: Number of drinks consumed today must be <= Number of drinks consumed per day
-    if (drinksPerDay > drinksToday) {
+    if (drinksToday < drinksPerDay) {
       setError(
         "Exclusion rule triggered: Number of drinks consumed today must be less than or equal to the Number of drinks consumed per day."
       );
