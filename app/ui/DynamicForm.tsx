@@ -69,7 +69,7 @@ export default function DynamicFormComponent({
                     ? attributes[cond.index]
                     : undefined;
                 failingConditions.push(
-                  `${attr?.question} should be ${cond.threshold}`
+                  `${attr?.question} should/should not be ${cond.threshold}`
                 );
               }
             });
