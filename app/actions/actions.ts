@@ -5,11 +5,7 @@ import User from "../models/Users";
 import bcrypt from "bcryptjs";
 import connect from "../utils/db";
 import { signIn } from "@/auth";
-import {
-  ApiResultResponse,
-  DecisionData,
-  EndpointState,
-} from "../utils/definitions";
+import { ApiResultResponse, EndpointState } from "../utils/definitions";
 import Decision from "../models/Decisions";
 import Decisions from "../models/Decisions";
 
@@ -248,16 +244,19 @@ export async function endpointResult(
   }
 }
 
-export async function fetchDatabaseDecisions(): Promise<DecisionData[]> {
+export async function fetchDatabaseDecisions(): Promise<string> {
   await connect();
   try {
     console.log("Fetching decisions...");
-    const decisions = await Decisions.find({}).sort({ createdAt: -1 }).exec();
+    const decisions = await Decisions.find({})
+      .sort({ createdAt: -1 })
+      .lean()
+      .exec();
     console.log("Fetched: ", decisions);
-    return decisions;
+    return JSON.stringify(decisions);
   } catch (error) {
     console.error("Error fetching decisions:", error);
-    return [];
+    return JSON.stringify([]);
   }
 }
 
