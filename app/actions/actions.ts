@@ -70,7 +70,7 @@ export async function loginWithCreds(formData: FormData) {
       return { error: "Invalid credentials." };
     }
 
-    return { sucess: true }; // Success case, return an empty object
+    return { sucess: true };
   } catch (error) {
     console.error("Something went wrong.", error);
     return { error: "Something went wrong. Please try again later." };
@@ -237,7 +237,7 @@ export async function endpointResult(
     const data = await res.json();
     console.log("Fetched data:", data);
 
-    return data.results; // Ensure we return the results array
+    return data.results;
   } catch (error) {
     console.error("Network or API error:", error);
     return undefined;
@@ -259,32 +259,3 @@ export async function fetchDatabaseDecisions(): Promise<string> {
     return JSON.stringify([]);
   }
 }
-
-// export async function endpointResultId(
-//   url: string,
-//   apiKey: string,
-//   resultId: string
-// ): Promise<ApiResultResponse[] | undefined> {
-//   try {
-//     const res = await fetch(`${url}/${resultId}`, {
-//       headers: {
-//         Authorization: `ApiKey ${apiKey}`,
-//         "Content-Type": "application/json",
-//       },
-//       method: "GET",
-//     });
-
-//     if (!res.ok) {
-//       console.error(`Error: ${res.status} - ${res.statusText}`);
-//       return undefined;
-//     }
-
-//     const data = await res.json();
-//     console.log("Fetched data:", data);
-
-//     return data.results; // Ensure we return the results array
-//   } catch (error) {
-//     console.error("Network or API error:", error);
-//     return undefined;
-//   }
-// }
