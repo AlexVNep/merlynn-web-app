@@ -41,7 +41,7 @@ export default function DynamicFormComponent({
     const drinksToday =
       Number(formData.get("Number of drinks consumed today?")) || 0;
     const drinksPerDay =
-      Number(formData.get("Number of drinks consumed per day?")) || 0;
+      Number(formData.get("Number of drink consumed per day?")) || 0;
 
     setError(null);
 
@@ -70,7 +70,7 @@ export default function DynamicFormComponent({
     }
 
     // Apply the exclusion rule: Number of drinks consumed today must be <= Number of drinks consumed per day
-    if (drinksToday < drinksPerDay) {
+    if (drinksPerDay < drinksToday) {
       setError(
         "Exclusion rule triggered: Number of drinks consumed today must be less than or equal to the Number of drinks consumed per day."
       );
