@@ -1,6 +1,6 @@
 # NextJS API Form Application
 
-## Overview
+## **Overview**
 
 This project is a web application built using Next.js that demonstrates API integration, database interaction, session handling, and dynamic form generation. It is designed to assess coding skills in the following areas:
 
@@ -11,7 +11,7 @@ This project is a web application built using Next.js that demonstrates API inte
 - Session handling
 - Security and form validation considerations
 
-## Tech Stack
+## **Tech Stack**
 
 - **Next.js** - React framework for server-side rendering and API routes
 - **React.js** - UI library for building components
@@ -20,7 +20,7 @@ This project is a web application built using Next.js that demonstrates API inte
 - **Mongoose** - ODM for interacting with MongoDB
 - **TypeScript** - Strongly typed JavaScript
 
-## Features
+## **Features**
 
 1. **User Authentication**
 
@@ -47,7 +47,7 @@ This project is a web application built using Next.js that demonstrates API inte
    - If the endpoint ends in `/results`, users are directed to a results page
    - If an ID is provided, users are taken to a page showing a specific result
 
-## Setup Instructions
+## **Setup Instructions**
 
 ### Prerequisites
 
@@ -58,43 +58,46 @@ This project is a web application built using Next.js that demonstrates API inte
 ### Installation
 
 1. Clone the repository:
-   ```sh
+   ```bash
    git clone git@github.com:AlexVNep/merlynn-web-app.git
    cd merlynn-web-app
    ```
 2. Install dependencies:
-   ```sh
-    pm install
+   ```bash
+    npm install
    ```
 3. Set up environment variables:
    - Run the following to create a secret:
-   ```sh
+   ```bash
    npx auth secret
    ```
    - Add your mongodb connection string so you have the following in your env.locale
-   ```sh
+   ```bash
    NEXTAUTH_SECRET=your_secret_key
-   MONGODB_URI=your_mongodb_connection_string
+   MONGODB_URL=your_mongodb_connection_string
    ```
 4. Start the development server:
-   ```sh
+   ```bash
    npm run dev
    ```
 5. Open http://localhost:3000 in your browser.
 
-## How It Works
+## **How It Works**
 
 1. User Authentication
-   Sign up or log in to access protected pages.
+
+   - Sign up or log in to access protected pages.
 
 2. Submitting an API Endpoint
-   Enter an API URL and key.
-   Submit the form to generate a dynamic form based on API data.
+
+   - Enter an API URL and key.
+   - Submit the form to generate a dynamic form based on API data.
 
 3. Viewing API Results
-   If the API endpoint ends in /results, a list of decisions is displayed.
-   If an ID is entered, the user is redirected to a specific result.
+
+   - If the API endpoint ends in /results, a list of decisions is displayed.
+   - If an ID is entered, the user is redirected to a specific result.
 
 4. Viewing Past Submissions
-   Navigate to the results page to view previously stored API results.
-   Use the search bar to filter results by model name or ID.
+   - Navigate to the Database page to view previously stored form submissions from MongoDB.
+   - Use the search bar to filter results by model name or ID.
