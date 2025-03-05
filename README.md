@@ -51,7 +51,7 @@ This project is a web application built using Next.js that demonstrates API inte
 
 ### Prerequisites
 
-- **Node.js** (v16 or later)
+- **Node.js** (v20 or later)
 - **MongoDB** (Local or Cloud Instance)
 - **Git** (for cloning the repository)
 
