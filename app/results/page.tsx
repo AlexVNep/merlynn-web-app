@@ -2,7 +2,6 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-
 import { ApiResultResponse } from "../utils/definitions";
 import { endpointResult } from "../actions/actions";
 import ResultCard from "../ui/ResultCard";
@@ -21,8 +20,8 @@ export default function ResultPage() {
           const response = await endpointResult(url, key);
           console.log("Response from endpointResult:", response);
 
-          setState(response || []); // Ensure we always set an array
-          localStorage.setItem("resultsData", JSON.stringify(response || [])); // Store in localStorage
+          setState(response || []);
+          localStorage.setItem("resultsData", JSON.stringify(response || []));
         } catch (error) {
           console.log(error);
         }
@@ -34,7 +33,7 @@ export default function ResultPage() {
 
   useEffect(() => {
     console.log("Updated State:", state);
-  }, [state]); // Logs when `state` changes
+  }, [state]);
 
   return (
     <div className="w-full flex mt-5 justify-center">
@@ -45,7 +44,9 @@ export default function ResultPage() {
         {state.length > 0 ? (
           <ResultCard endpointResult={state} />
         ) : (
-          <p className="text-yellow-400">Fetching data...</p>
+          <h1 className="text-3xl font-bold text-center text-gray-200">
+            Loading...
+          </h1>
         )}
       </section>
     </div>

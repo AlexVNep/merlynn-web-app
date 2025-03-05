@@ -7,7 +7,7 @@ export default function DashboardPage() {
   console.log(session);
   return (
     <div>
-      {status === "loading" ? (
+      {status === "loading" || status === "unauthenticated" ? (
         <div className="w-full flex mt-5 justify-center">
           <h1 className="text-3xl w-full text-center font-bold mb-6">
             Loading
