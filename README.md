@@ -59,6 +59,42 @@ This project is a web application built using Next.js that demonstrates API inte
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/yourusername/nextjs-api-form.git
-   cd nextjs-api-form
+   git clone git@github.com:AlexVNep/merlynn-web-app.git
+   cd merlynn-web-app
    ```
+2. Install dependencies:
+   ```sh
+    pm install
+   ```
+3. Set up environment variables:
+   - Run the following to create a secret:
+   ```sh
+   npx auth secret
+   ```
+   - Add your mongodb connection string so you have the following in your env.locale
+   ```sh
+   NEXTAUTH_SECRET=your_secret_key
+   MONGODB_URI=your_mongodb_connection_string
+   ```
+4. Start the development server:
+   ```sh
+   npm run dev
+   ```
+5. Open http://localhost:3000 in your browser.
+
+## How It Works
+
+1. User Authentication
+   Sign up or log in to access protected pages.
+
+2. Submitting an API Endpoint
+   Enter an API URL and key.
+   Submit the form to generate a dynamic form based on API data.
+
+3. Viewing API Results
+   If the API endpoint ends in /results, a list of decisions is displayed.
+   If an ID is entered, the user is redirected to a specific result.
+
+4. Viewing Past Submissions
+   Navigate to the results page to view previously stored API results.
+   Use the search bar to filter results by model name or ID.
