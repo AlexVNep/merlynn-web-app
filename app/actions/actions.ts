@@ -5,7 +5,11 @@ import User from "../models/Users";
 import bcrypt from "bcryptjs";
 import connect from "../utils/db";
 import { signIn } from "@/auth";
-import { ApiResultResponse, EndpointState } from "../utils/definitions";
+import {
+  ApiResultResponse,
+  DecisionData,
+  EndpointState,
+} from "../utils/definitions";
 import Decision from "../models/Decisions";
 import Decisions from "../models/Decisions";
 
@@ -133,7 +137,8 @@ export async function formSubmit(
   state: EndpointState,
   formData: FormData,
   url: string,
-  apiKey: string
+  apiKey: string,
+  model: string
 ): Promise<EndpointState | undefined> {
   interface InputData {
     [key: string]: number | string | undefined;
@@ -183,6 +188,7 @@ export async function formSubmit(
         userInput: data.userInput,
         decision: data.decision,
         confidence: data.confidence,
+        model: model,
       });
       console.log("Decision saved successfully.");
     }
@@ -203,6 +209,7 @@ export async function createDecision(data: {
   userInput: (number | string)[];
   decision: string;
   confidence: number;
+  model: string;
 }) {
   try {
     const newDecision = new Decision(data);
@@ -241,7 +248,7 @@ export async function endpointResult(
   }
 }
 
-export async function fetchDatabaseDecisions(): Promise<ApiResultResponse[]> {
+export async function fetchDatabaseDecisions(): Promise<DecisionData[]> {
   await connect();
   try {
     console.log("Fetching decisions...");

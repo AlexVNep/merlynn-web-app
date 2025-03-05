@@ -56,9 +56,12 @@ export interface DecisionData {
   modelInput: {
     [key: string]: number | string;
   };
-  userInput: (number | string)[];
+  userInput: {
+    [key: string]: number | string;
+  };
   decision: string;
   confidence: number;
+  model: string;
 }
 
 export interface EndpointState {

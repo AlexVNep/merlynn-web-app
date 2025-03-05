@@ -82,7 +82,8 @@ export default function DynamicFormComponent({
         state,
         formData,
         state.url || "",
-        state.key || ""
+        state.key || "",
+        state.data?.name || ""
       );
       if (response && response.data && !response.error) {
         setDecision(response.data as unknown as DecisionData);

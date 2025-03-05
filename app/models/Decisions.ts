@@ -10,6 +10,7 @@ const decisionSchema = new Schema<DecisionData>(
     userInput: { type: Map, of: Schema.Types.Mixed, required: true },
     decision: { type: String, required: true },
     confidence: { type: Number, required: true },
+    model: { type: String },
   },
   { timestamps: true }
 );
