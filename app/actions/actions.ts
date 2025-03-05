@@ -7,6 +7,7 @@ import connect from "../utils/db";
 import { signIn } from "@/auth";
 import { ApiResultResponse, EndpointState } from "../utils/definitions";
 import Decision from "../models/Decisions";
+import Decisions from "../models/Decisions";
 
 type RegisterResponse = { success: true } | { error: string };
 
@@ -237,6 +238,19 @@ export async function endpointResult(
   } catch (error) {
     console.error("Network or API error:", error);
     return undefined;
+  }
+}
+
+export async function fetchDatabaseDecisions(): Promise<ApiResultResponse[]> {
+  await connect();
+  try {
+    console.log("Fetching decisions...");
+    const decisions = await Decisions.find({}).sort({ createdAt: -1 }).exec();
+    console.log("Fetched: ", decisions);
+    return decisions;
+  } catch (error) {
+    console.error("Error fetching decisions:", error);
+    return [];
   }
 }
 

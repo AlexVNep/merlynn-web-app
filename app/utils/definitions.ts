@@ -71,8 +71,12 @@ export interface EndpointState {
 
 export interface ApiResultResponse {
   id: string;
-  modelInputs: [];
-  userInputs: [];
+  modelInputs: {
+    [key: string]: number | string;
+  };
+  userInputs: {
+    [key: string]: number | string;
+  };
   confidence: number;
   decision: string;
 }
