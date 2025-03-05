@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NextJS API Form Application
 
-## Getting Started
+## Overview
 
-First, run the development server:
+This project is a web application built using Next.js that demonstrates API integration, database interaction, session handling, and dynamic form generation. It is designed to assess coding skills in the following areas:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- NextJS and framework usage
+- API integration
+- Database setup
+- UI/UX design
+- Session handling
+- Security and form validation considerations
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Next.js** - React framework for server-side rendering and API routes
+- **React.js** - UI library for building components
+- **TailwindCSS** - Utility-first CSS framework for styling
+- **MongoDB** - NoSQL database for storing API form results
+- **Mongoose** - ODM for interacting with MongoDB
+- **TypeScript** - Strongly typed JavaScript
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Features
 
-## Learn More
+1. **User Authentication**
 
-To learn more about Next.js, take a look at the following resources:
+   - Simple sign-up and login (email & password)
+   - Protected routes for logged-in users
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **API Integration**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   - Users can input an API endpoint and API key
+   - The app performs a GET request to fetch model inputs
+   - A dynamic form is generated based on the response
 
-## Deploy on Vercel
+3. **Data Storage**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   - Successful form submissions are saved to the database
+   - API responses are stored for later reference
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Decision History**
+
+   - Users can view previously submitted forms and API results
+   - Search functionality to filter results by model or ID
+
+5. **Dynamic Navigation**
+   - If the endpoint ends in `/results`, users are directed to a results page
+   - If an ID is provided, users are taken to a page showing a specific result
+
+## Setup Instructions
+
+### Prerequisites
+
+- **Node.js** (v16 or later)
+- **MongoDB** (Local or Cloud Instance)
+- **Git** (for cloning the repository)
+
+### Installation
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/yourusername/nextjs-api-form.git
+   cd nextjs-api-form
+   ```
